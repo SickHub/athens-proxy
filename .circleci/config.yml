@@ -1,0 +1,83 @@
+version: 2.1
+aliases:
+  - &docker-dind-kind
+    - image: drpsychick/dind-buildx-helm-kind:latest
+  - &deploy
+    - checkout
+    - setup_remote_docker:
+        version: 20.10.2
+    - run:
+        name: Lint charts
+        command: |
+          ct lint --remote origin --chart-dirs=${CHARTS_DIR} --all
+    - run:
+        name: Package charts
+        command: |
+          for chart in $(ls -1d ${CHARTS_DIR}/*); do
+            helm dep update $chart
+            helm package $chart
+          done
+    - run:
+        name: Create and start kind cluster
+        command: |
+          echo "export KUBECONFIG=$PWD/$KIND_KUBECONFIG" >> $BASH_ENV && source $BASH_ENV
+          echo "kind: Cluster
+          apiVersion: kind.x-k8s.io/v1alpha4
+          networking:
+            apiServerPort: 6443
+          nodes:
+          - role: control-plane
+          - role: worker" > kind-config.yaml
+          kind delete cluster --name "$CLUSTER_NAME" --quiet || true
+          kind create cluster --name "$CLUSTER_NAME" --kubeconfig $KUBECONFIG \
+            --config kind-config.yaml --wait $WAIT_FOR_CONTROLPLANE
+          # portforward local port (used in config) to control-plane local port (6443)
+          socat "TCP-LISTEN:6443,reuseaddr,fork" \
+            EXEC:"'docker exec -i test-charts-control-plane socat STDIO TCP:localhost:6443'" &
+          kubectl cluster-info --context kind-test-charts
+    - run:
+        name: Install on kind
+        command: |
+          echo "export KUBECONFIG=$PWD/$KIND_KUBECONFIG" >> $BASH_ENV && source $BASH_ENV
+          socat "TCP-LISTEN:6443,reuseaddr,fork" \
+            EXEC:"'docker exec -i test-charts-control-plane socat STDIO TCP:localhost:6443'" &
+          kubectl cluster-info --context kind-test-charts
+          ct install --namespace $NAMESPACE --remote origin --chart-dirs=${CHARTS_DIR} --all
+          kind delete cluster --name "$CLUSTER_NAME" --quiet || true
+jobs:
+  deploy:
+    docker: *docker-dind-kind
+    resource_class: small
+    environment:
+      CHARTS_DIR: charts
+      BASH_ENV: /etc/profile
+      KIND_KUBECONFIG: test-charts.kubeconfig
+      CLUSTER_NAME: test-charts
+      WAIT_FOR_CONTROLPLANE: 60s
+      NAMESPACE: default
+    steps: *deploy
+
+workflows:
+  version: 2
+  chart-test:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
+  weekly:
+    triggers:
+      - schedule:
+          # mondays, 5:33 am, UTC
+          cron: "33 5 * * 1"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              ignore:
+                - gh-pages
