@@ -3,9 +3,9 @@ entries:
   athens-proxy:
   - apiVersion: v1
     appVersion: 0.11.1
-    created: "2022-12-21T22:46:00.884691+01:00"
+    created: "2022-12-21T23:00:52.475664+01:00"
     description: The proxy server for Go modules
-    digest: b68caced3b92a53dc45781c89960753a952ea0fc88a117360ec4aa2a9acbc5c9
+    digest: 48318e1e15c31f6596d7370930ba82359ce9c041903ec05b7e7ac568de3b8870
     home: https://github.com/gomods/athens
     icon: https://raw.githubusercontent.com/gomods/athens/main/docs/static/banner.png
     keywords:
@@ -23,4 +23,4 @@ entries:
     urls:
     - https://sickhub.github.io/athens-proxy/athens-proxy-0.5.3.tgz
     version: 0.5.3
-generated: "2022-12-21T22:46:00.883748+01:00"
+generated: "2022-12-21T23:00:52.474716+01:00"
