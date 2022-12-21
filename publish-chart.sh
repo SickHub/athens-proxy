@@ -14,7 +14,7 @@ function bumpChartVersion() {
 # checkout github-pages
 git checkout gh-pages
 git pull
-git rebase master
+git rebase main
 git pull
 git push
 
@@ -30,8 +30,8 @@ git add .
 git commit -m "publish charts" -av
 git push
 
-# switch back to master and merge
-git checkout master
+# switch back to main and merge
+git checkout main
 git pull
 git merge gh-pages
 git push
