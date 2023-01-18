@@ -10,6 +10,9 @@ image:
   ##
   pullPolicy: IfNotPresent
 
+  ## Specify secrets containing credentials for pulling images
+  pullSecrets: []
+  #  - name: name-of-secret
 
 livenessProbe:
   failureThreshold: 3
