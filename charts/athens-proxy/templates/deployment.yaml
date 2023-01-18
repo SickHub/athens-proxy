@@ -9,13 +9,13 @@ metadata:
     heritage: "{{ .Release.Service }}"
 spec:
   replicas: {{ .Values.replicaCount }}
-{{- if .Values.strategy }}
+  {{- if .Values.strategy }}
   strategy:
-{{ toYaml .Values.strategy | indent 4 }}
-  {{- if eq .Values.strategy.type "Recreate" }}
-  rollingUpdate: null
+  {{- toYaml .Values.strategy | nindent 4 }}
+    {{- if eq .Values.strategy.type "Recreate" }}
+    rollingUpdate: null
+    {{- end }}
   {{- end }}
-{{- end }}
   selector:
     matchLabels:
       app: {{ template "fullname" . }}
@@ -31,10 +31,14 @@ spec:
         checksum/ssh-config: {{ include (print $.Template.BasePath "/config-ssh-git-servers.yaml") . | sha256sum }}
         checksum/ssh-secret: {{ include (print $.Template.BasePath "/secret-ssh-git-servers.yaml") . | sha256sum }}
         {{- if .Values.annotations }}
-{{ toYaml .Values.annotations | indent 8 }}
+        {{- toYaml .Values.annotations | nindent 8 }}
         {{- end }}
     spec:
       serviceAccount: {{ template "fullname" . }}
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml .Values.image.pullSecrets | nindent 8 }}
+      {{- end }}
       {{- if .Values.sshGitServers }}
       initContainers:
         - name: copy-key-files
@@ -76,7 +80,7 @@ spec:
           value: "3"
         {{- end }}
         {{- if .Values.configEnvVars }}
-{{ toYaml .Values.configEnvVars | indent 8 }}
+        {{- toYaml .Values.configEnvVars | nindent 8 }}
         {{- end }}
         - name: ATHENS_STORAGE_TYPE
           value: {{ .Values.storage.type | quote }}
@@ -198,7 +202,7 @@ spec:
         {{- end }}
       {{- with .Values.resources }}
         resources:
-{{ toYaml . | indent 10 }}
+          {{- toYaml . | nindent 10 }}
       {{- end }}
       volumes:
       - name: storage-volume
@@ -238,13 +242,13 @@ spec:
       {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
-{{ toYaml . | indent 8 }}
+        {{- toYaml . | nindent 8 }}
     {{- end }}
     {{- with .Values.affinity }}
       affinity:
-{{ toYaml . | indent 8 }}
+        {{- toYaml . | nindent 8 }}
     {{- end }}
     {{- with .Values.tolerations }}
       tolerations:
-{{ toYaml . | indent 8 }}
+        {{- toYaml . | nindent 8 }}
     {{- end }}
