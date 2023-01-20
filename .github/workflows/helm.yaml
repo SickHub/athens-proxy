@@ -38,12 +38,12 @@ jobs:
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.4.0
-#        if: steps.list-changed.outputs.changed == 'true'
+        if: steps.list-changed.outputs.changed == 'true'
 
       - name: Run chart-testing (install)
         id: chart-install
-        run: |
-          ct install --remote origin --all && echo "::set-output name=success::true"
+        run: ct install --remote origin --all
+        if: steps.list-changed.outputs.changed == 'true'
 
 #  release:
 #    if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
