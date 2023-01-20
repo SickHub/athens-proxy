@@ -43,7 +43,7 @@ jobs:
       - name: Run chart-testing (install)
         id: chart-install
         run: |
-          ct install --remote origin --chart-dirs=${CHARTS_DIR} --all && echo "::set-output name=success::true"
+          ct install --remote origin --all && echo "::set-output name=success::true"
 
 #  release:
 #    if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
