@@ -41,7 +41,7 @@ service:
 ingress:
   enabled: false
   # Provide key/value annotations
-  annotations:
+  annotations: {}
   className: ""
   # Provide an array of values for the ingress host mapping
   hosts:
