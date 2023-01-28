@@ -14,6 +14,3 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 {{- end -}}
-{{- define "readinessPath" -}}
-{{- if contains "v0.2.0" .Values.image.tag -}}/{{- else -}}/readyz{{- end -}}
-{{- end -}}
