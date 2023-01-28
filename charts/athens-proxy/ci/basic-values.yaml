@@ -1,4 +1,8 @@
 ingress:
   enabled: true
   annotations:
-#    example.io/foo: bar
+  hosts:
+    - host: athens-proxy.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
