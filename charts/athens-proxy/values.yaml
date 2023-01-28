@@ -2,7 +2,8 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: gomods/athens
-  tag: v0.11.0
+  # Override the chart appVersion and use a specific tag
+  # tag: v0.11.0
 
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -41,7 +42,7 @@ service:
 ingress:
   enabled: false
   # Provide key/value annotations
-  annotations:
+  annotations: {}
   className: ""
   # Provide an array of values for the ingress host mapping
   hosts:
@@ -128,12 +129,12 @@ upstreamProxy:
   url: "https://gocenter.io"
 
 jaeger:
+  enabled: false
   ## Type of service; valid values are "ClusterIP", "LoadBalancer", and "NodePort".
   type: ClusterIP
   image:
     repository: jaegertracing/all-in-one
     tag: latest
-  enabled: true
   # you must set this on the command line when you run 'helm install'
   # for example, you need to run 'helm install --set jaeger.url=myurl ...'
   url: "SET THIS ON THE COMMAND LINE"
