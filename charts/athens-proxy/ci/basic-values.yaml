@@ -1,0 +1,4 @@
+ingress:
+  enabled: true
+  annotations:
+#    example.io/foo: bar
