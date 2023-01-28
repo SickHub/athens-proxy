@@ -44,22 +44,3 @@ jobs:
         id: chart-install
         run: ct install --remote origin --all
         if: steps.list-changed.outputs.changed == 'true'
-
-  release:
-    if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
-    name: Publish Helm Chart
-    runs-on: ubuntu-latest
-    # depending on default permission settings for your org (contents being read-only or read-write for workloads), you will have to add permissions
-    # see: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
-    permissions:
-      contents: write
-    steps:
-      - name: Configure Git
-        run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.5.0
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
