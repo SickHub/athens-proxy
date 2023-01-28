@@ -70,7 +70,7 @@ spec:
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
         readinessProbe:
           httpGet:
-            path: "{{ template "readinessPath" . }}"
+            path: "/readyz"
             port: 3000
         env:
         - name: ATHENS_GOGET_WORKERS
