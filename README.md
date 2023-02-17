@@ -27,10 +27,4 @@ On Artifact Hub: https://artifacthub.io/packages/search?org=sickhub
 * See [Contributing](CONTRIBUTING.md)
 
 ### Publish new chart version
-```shell
-# (usual process) change chart version in master commit, then publish:
-./publish-chart.sh UPDATE
-
-# force bump the version of all charts:
-./publish-chart.sh
-```
+Change the version in `Chart.yaml`, when the change is merged to main, it will trigger creating a release.
