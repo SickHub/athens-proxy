@@ -6,8 +6,8 @@ on:
 
   pull_request:
       types: [opened, reopened, synchronize]
-#      paths:
-#          - "charts/**"
+      paths:
+          - "charts/**"
 
 jobs:
   test:
