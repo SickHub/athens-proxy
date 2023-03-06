@@ -1,3 +1,8 @@
+# New home: https://github.com/gomods/athens-charts
+
+
+---
+
 [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/sickhub)](https://artifacthub.io/packages/search?org=sickhub)
 [![CircleCI](https://img.shields.io/circleci/build/github/SickHub/athens-proxy)](https://app.circleci.com/pipelines/github/SickHub/athens-proxy)
 [![license](https://img.shields.io/github/license/sickhub/athens-proxy.svg)](https://github.com/sickhub/athens-proxy/blob/master/LICENSE)
